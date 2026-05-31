@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET') {
     $row = $stmt->fetch(PDO::FETCH_ASSOC);
     $last = $row['last_pack_opened'];
     $canOpen = !$last || (new DateTime($last))->diff(new DateTime())->h >= 24;
-    echo json_encode(['canOpen' => $canOpen]);
+    echo json_encode(['canOpen' => $canOpen,'lastOpened' => $last]);
 }
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt = $pdo->prepare("UPDATE users SET last_pack_opened = NOW() WHERE id = ?");

@@ -187,13 +187,18 @@ async function openPack() {
   console.log("clicked pack button");
   const check = await fetch("checkCard.php");
   const status = await check.json();
+  const lastOpened = new Date(status.lastOpened);
+  const nextOpen = new Date(lastOpened.getTime()+ 24 * 60*60*1000);
+  const diff = nextOpen - new Date();
+  const hours = Math.floor( diff / 1000 / 60 / 60 )
+  const minutes = Math.floor ((diff/1000/60)%60)
   if (!status.canOpen) {
-    console.log("can't open pack");
+    console.log(`can't open pack. next open in ${hours}h,${minutes}m`);
     let notif = document.getElementById("notif");
     notif.classList.add("visible");
     notif.classList.remove("valid");
     notif.classList.add("invalid");
-    notif.innerHTML = "Can't open the pack yet!.";
+    notif.innerHTML = `Can't open the pack yet!. Wait ${hours}h${minutes}m.`;
     setTimeout(function () {
       notif.classList.remove("visible");
     }, 3000);
