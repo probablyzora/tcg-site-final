@@ -62,9 +62,9 @@ function applyTheme(requestedTheme) {
 }
 
 // initial theme run check //////
-console.log(submitButton)
+console.log(submitButton);
 applyTheme(currentTheme);
-console.log("a",submitButton);
+console.log("a", submitButton);
 themeButton.addEventListener("click", function () {
   console.log("theme button click");
   switch (currentTheme) {
@@ -91,7 +91,7 @@ function verifyEmail(writtenEmail) {
   }
 }
 submitButton.addEventListener("click", function () {
-  console.log("a",submitButton);
+  console.log("a", submitButton);
   let givenEmail = document.getElementById("email").value;
   let notif = document.getElementById("notif");
   tickedBox = document.querySelector(".tosCheckbox").checked;
@@ -185,8 +185,23 @@ if (searchName) {
 
 async function openPack() {
   console.log("clicked pack button");
-  const numberOfCards = 5;
+  const check = await fetch("checkCard.php");
+  const status = await check.json();
+  if (!status.canOpen) {
+    console.log("can't open pack");
+    let notif = document.getElementById("notif");
+    notif.classList.add("visible");
+    notif.classList.remove("valid");
+    notif.classList.add("invalid");
+    notif.innerHTML = "Can't open the pack yet!.";
+    setTimeout(function () {
+      notif.classList.remove("visible");
+    }, 3000);
+    return;
+  }
 
+  await fetch("checkCard.php", { method: "POST" });
+  const numberOfCards = 5;
   for (let i = 0; i < numberOfCards; i++) {
     randomId = Math.floor(Math.random() * 1025);
     try {
