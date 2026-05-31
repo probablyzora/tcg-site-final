@@ -34,7 +34,8 @@ if (isset($_SESSION['user_id'])) {
 
     <!-- ## Top of page w/ Logo n dark/light mode-->
     <section class="topPage">
-        <div class="logo" id="logo">a legally distinct <br>pocket monsters™<br>trading card game<br>website</div>
+        <!-- <div class="logo" id="logo">a legally distinct <br>pocket monsters™<br>trading card game<br>website</div> -->
+        <div class="logo" id="logo"><img src="assets/logo.png"></div>
     </section>
     <!-- ########################################-->
 
@@ -88,14 +89,14 @@ if (isset($_SESSION['user_id'])) {
                 <div class="swiper-pagination"></div>
     </section>
     <section class="buttonSection">
-        <?php if (isset($_SESSION['user_id'])): ?>  <!-- si il y a bien la session d'un utilisateur -->
+        <?php if (isset($_SESSION['user_id'])): ?> <!-- si il y a bien la session d'un utilisateur -->
             <input type="text" id="searchName" placeholder="enter pokemon name">
             <div class="button top" id="addButton">ADD TO DATABASE</div>
         <?php else: ?> <!-- sinon message par defaut -->
             <p>login to see your collection</p>
         <?php endif; ?> <!-- arreter le if car sections php différentes -->
     </section>
-    <section class="centerPage" id="cardCollection"> <?php foreach ($savedCards as $card): 
+    <section class="centerPage" id="cardCollection"> <?php foreach ($savedCards as $card):
         $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png";
         ?>
             <div class="poke-card pulse">
@@ -108,10 +109,7 @@ if (isset($_SESSION['user_id'])) {
         <?php endforeach; ?>
     </section>
     <section class="buttonSection">
-        <div class="button bottom
-      ">TERMS OF SERVICE</div>
-        <div class="button bottom
-      ">CONTACT</div>
+        <div class="button bottom" onclick="document.location='iotprojects.php'">IOT Projects</div>
     </section>
     <section>
         <section class="topPage">

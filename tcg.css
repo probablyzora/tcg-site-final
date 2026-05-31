@@ -18,7 +18,7 @@ CSS variables
 /*
 slide properties*/
 .swiper-slide {
-  background-color:var(--primary-color);
+  background-color: var(--primary-color);
   object-fit: fill;
   display: flex;
   text-align: center;
@@ -242,41 +242,41 @@ pendulum swing buttons
   border: 1px solid rgb(222, 47, 41);
   background-color: rgba(198, 12, 12, 0.4);
 }
-.tosCheckbox{
-    color: var(--text-color);
+.tosCheckbox {
+  color: var(--text-color);
 }
-.glightbox3.img{
-    height:50%;
-    width:50%;
-    justify-items: space-evenly;
+.glightbox3.img {
+  height: 50%;
+  width: 50%;
+  justify-items: space-evenly;
 }
 .nameSection {
-    padding: 20px;
-    display: flex;
-    justify-content: center;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 .searchName input {
-    padding: 10px;
-    border-radius: 20px;
-    border: 2px solid var(--primary-color);
-    outline: none;
+  padding: 10px;
+  border-radius: 20px;
+  border: 2px solid var(--primary-color);
+  outline: none;
 }
 
 .poke-card {
-    margin: 10px;
-    padding: 15px;
-    border-radius: 15px;
-    text-align: center;
-    color: var(--text-color);
-    background-color: var(--primary-color);
+  margin: 10px;
+  padding: 15px;
+  border-radius: 15px;
+  text-align: center;
+  color: var(--text-color);
+  background-color: var(--primary-color);
 }
 .poke-card img {
-    image-rendering: pixelated;
+  image-rendering: pixelated;
   transform: scale(1.5);
 }
 
 *.dark {
   color: var(--darkMode-text-color);
-  background-color:var(--darkMode-color);
+  background-color: var(--darkMode-color);
 }
