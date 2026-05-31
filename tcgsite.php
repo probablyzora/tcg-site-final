@@ -9,7 +9,7 @@ $data = json_decode($response->getBody(), true); // utilisation du json
 
 $sprite = $data['sprites']["front_default"]; // pas envie de me battre avec les images non-transparentes de la gen2
 echo json_encode([
-    'query' => $data['name'],
+    'name' => $data['name'],
     'id' => $data['id'],
     'sprite'=> $sprite
 ]);

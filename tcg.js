@@ -28,8 +28,7 @@ const themeButton = document.getElementById("themeButton");
 const submitButton = document.getElementById("submitButton");
 console.log(themeButton);
 let currentTheme = localStorage.getItem("theme");
-let tickedBox = document.querySelector(".tosCheckbox").checked;
-const boosterPack = document.getElementById("boosterPack");
+let tickedBox = document.querySelector(".tosCheckbox")?.checked;
 console.log("submitButton");
 // THEME STUFF
 //
@@ -49,6 +48,7 @@ function applyTheme(requestedTheme) {
         "something's wrong with applyingtheme, setting to light mode",
       );
       oppositeTheme = "dark";
+      requestedTheme = "light";
   }
   body.forEach((body) => body.classList.add(requestedTheme));
   body.forEach((body) => body.classList.remove(oppositeTheme));
@@ -62,24 +62,9 @@ function applyTheme(requestedTheme) {
 }
 
 // initial theme run check //////
-
-switch (currentTheme) {
-  case "light":
-    console.log(currentTheme);
-    console.log("light mode in localStorage");
-    break;
-  case "dark":
-    console.log(currentTheme);
-    console.log("dark mode in storage");
-    break;
-  default:
-    console.log(currentTheme);
-    console.log("no theme in storage or error, setting default to light mode");
-    localStorage.setItem("theme", "light");
-}
+console.log(submitButton)
 applyTheme(currentTheme);
-///
-
+console.log("a",submitButton);
 themeButton.addEventListener("click", function () {
   console.log("theme button click");
   switch (currentTheme) {
@@ -106,6 +91,7 @@ function verifyEmail(writtenEmail) {
   }
 }
 submitButton.addEventListener("click", function () {
+  console.log("a",submitButton);
   let givenEmail = document.getElementById("email").value;
   let notif = document.getElementById("notif");
   tickedBox = document.querySelector(".tosCheckbox").checked;
@@ -140,13 +126,15 @@ submitButton.addEventListener("click", function () {
   }, 3000);
 });
 
-tosCheckbox.addEventListener("click", function () {
-  tickedBox = document.querySelector(".tosCheckbox").checked;
-  console.log(tickedBox);
-});
+//tosCheckbox.addEventListener("click", function () {
+//  tickedBox = document.querySelector(".tosCheckbox").checked;
+//  console.log(tickedBox);
+//});
 const addButton = document.getElementById("addButton");
 const searchName = document.getElementById("searchName");
 const cardCollection = document.getElementById("cardCollection");
+const boosterPack = document.getElementById("boosterPack");
+console.log("a", boosterPack);
 //asynchrone = ordre independant des autres fonctions
 async function addPokemonCard() {
   const name = searchName.value;
@@ -186,31 +174,36 @@ async function addPokemonCard() {
   }
 }
 
-addButton.addEventListener("click", addPokemonCard); // toucher bouton
-searchName.addEventListener("keypress", (event) => {
-  if (event.key === "Enter") addPokemonCard();
-}); // accepter touche Enter
+if (addButton) {
+  addButton.addEventListener("click", addPokemonCard);
+} // toucher bouton // voir ligne 228
+if (searchName) {
+  searchName.addEventListener("keypress", (event) => {
+    if (event.key === "Enter") addPokemonCard();
+  });
+} // accepter touche Enter
 
 async function openPack() {
+  console.log("clicked pack button");
   const numberOfCards = 5;
 
   for (let i = 0; i < numberOfCards; i++) {
-  randomId = Math.floor(Math.random()* 1025);
-  try {
-    const response = await fetch (`tcgsite.php?id=${randomId}`);
-    const data = await response.json();
-  if (data.error) {
-      console.log(data.error);
-      return;
-  }
-    const formData = new FormData(); // communication entre js/php et sql
-    formData.append("id", data.id);
-    formData.append("name", data.name);
-    await fetch("savecard.php", {
-      method: "POST",
-      body: formData,
-    });
-        const cardHTML = `
+    randomId = Math.floor(Math.random() * 1025);
+    try {
+      const response = await fetch(`tcgsite.php?id=${randomId}`);
+      const data = await response.json();
+      if (data.error) {
+        console.log(data.error);
+        return;
+      }
+      const formData = new FormData(); // communication entre js/php et sql
+      formData.append("id", data.id);
+      formData.append("name", data.name);
+      await fetch("savecard.php", {
+        method: "POST",
+        body: formData,
+      });
+      const cardHTML = `
             <div class="poke-card pulse">
                 <a href="${data.sprite}" class="glightbox" data-gallery="gallery1">
                     <img src="${data.sprite}" alt="${data.name}" style="width: 100px; image-rendering: pixelated;">
@@ -218,10 +211,14 @@ async function openPack() {
                 <p>#${data.id} ${data.name}</p>
             </div>
         `;
-    cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
-    GLightbox({ selector: ".glightbox" });
+      cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
+      GLightbox({ selector: ".glightbox" });
+    } catch (error) {
+      console.error("Error adding card:", error);
+    }
+  }
 }
-catch (error){
-  console.error("Error adding card:", error)
-}}}
-boosterPack.addEventListener('click', openPack);
+if (boosterPack) {
+  boosterPack.addEventListener("click", openPack);
+} // pour que ca fonctionne meme avec l'ordre de chargement
+console.log(boosterPack);
