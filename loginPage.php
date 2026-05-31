@@ -23,7 +23,7 @@
             <div>
                 <!-- pas classe mais on peux mettre ca en dehors du css car j'aimerai bien rendre tout ca -->
                 <!-- LOGIN -->
-                <form action="login.php" method="POST" style="display:flex; gap:5px;">
+                <form action="login.php" method="POST">
                     <input type="email" name="email" placeholder="email" required>
                     <input type="password" name="password" placeholder="password" required>
                     <button type="submit" class="button">login<br></button>
@@ -32,7 +32,7 @@
             <br>
             <div>
                 <!-- ENREGISTRER -->
-                <form action="register.php" method="POST" style="display:flex; gap:5px;">
+                <form action="register.php" method="POST">
                     <input type="email" name="email" placeholder="new email" required>
                     <input type="password" name="password" placeholder="new password" required>
                     <button type="submit" class="button">register</button>
