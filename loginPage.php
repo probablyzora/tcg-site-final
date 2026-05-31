@@ -18,18 +18,19 @@
     <!-- ########################################-->
 
     <!-- ###### center w/ swiperjs and glightbox integration and text-->
-    <section class="buttonSection">
+    <section class="loginSection">
         <?php if (!isset($_SESSION['user_id'])): ?>
-            <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
+            <div>
                 <!-- pas classe mais on peux mettre ca en dehors du css car j'aimerai bien rendre tout ca -->
                 <!-- LOGIN -->
                 <form action="login.php" method="POST" style="display:flex; gap:5px;">
                     <input type="email" name="email" placeholder="email" required>
                     <input type="password" name="password" placeholder="password" required>
-                    <button type="submit" class="button">login</button>
-        
+                    <button type="submit" class="button">login<br></button>
                 </form>
-                <br>
+            </div>
+            <br>
+            <div>
                 <!-- ENREGISTRER -->
                 <form action="register.php" method="POST" style="display:flex; gap:5px;">
                     <input type="email" name="email" placeholder="new email" required>
@@ -43,7 +44,7 @@
             </div>
         <?php endif; ?>
     </section>
-        <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/mcstudios/glightbox/dist/js/glightbox.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.js"></script>
-    <script src="tcg.js"></script>
-    </body>
+    <script src="tcgLogin.js"></script>
+</body>
