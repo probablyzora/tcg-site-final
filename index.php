@@ -16,8 +16,6 @@ if (isset($_SESSION['user_id'])) {
 }
 else header("Location: loginPage.php")
 ?>
-<!doctype html>
-<html lang="en">
 
 <head>
     <meta charset="UTF-8" />
@@ -88,6 +86,9 @@ else header("Location: loginPage.php")
                 <!-- If we need pagination -->
                 <div class="swiper-pagination"></div>
     </section>
+            <section class="topPage">
+            <div class="newsletter" id="newsletter">cards</div>
+        </section>
     <section class="buttonSection">
         <?php if (isset($_SESSION['user_id'])): ?> <!-- si il y a bien la session d'un utilisateur -->
             <input type="text" id="searchName" placeholder="enter pokemon name">

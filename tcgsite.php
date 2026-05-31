@@ -11,7 +11,10 @@ $sprite = $data['sprites']["front_default"]; // pas envie de me battre avec les 
 echo json_encode([
     'name' => $data['name'],
     'id' => $data['id'],
-    'sprite'=> $sprite
+    'sprite'=> $sprite,
+    'types' => array_map(fn($t) => $t['type']['name'], $data['types']),
+    'height' => $data['height'],
+    'weight' => $data['weight']
 ]);
 if ($response === false) {
     http_response_code(500);
