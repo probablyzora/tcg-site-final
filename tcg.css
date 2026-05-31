@@ -275,7 +275,6 @@ pendulum swing buttons
   image-rendering: pixelated;
   transform: scale(1.5);
 }
-
 *.dark {
   color: var(--darkMode-text-color);
   background-color: var(--darkMode-color);

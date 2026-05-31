@@ -14,6 +14,7 @@ if (isset($_SESSION['user_id'])) {
     $request->execute([$_SESSION['user_id']]);
     $savedCards = $request->fetchAll(PDO::FETCH_ASSOC); // verif de session et fetch des cartes
 }
+else header("Location: loginPage.php")
 ?>
 <!doctype html>
 <html lang="en">
@@ -31,7 +32,6 @@ if (isset($_SESSION['user_id'])) {
     <!-- Theme change button-->
     <div class="themeButton" id="themeButton"></div>
     <!---->
-
     <!-- ## Top of page w/ Logo n dark/light mode-->
     <section class="topPage">
         <!-- <div class="logo" id="logo">a legally distinct <br>pocket monsters™<br>trading card game<br>website</div> -->
