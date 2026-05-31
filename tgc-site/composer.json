@@ -1,0 +1,14 @@
+{
+    "name": "oszmyt/exemple",
+    "description": "Projet composer",
+    "type": "project",
+    "autoload": {
+        "psr-4": {
+            "Oszmyt\\Exemple\\": "src/"
+        }
+    },
+    "require": {
+        "fakerphp/faker": "^1.24",
+        "guzzlehttp/guzzle": "^7.10"
+    }
+}
