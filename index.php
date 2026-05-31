@@ -92,6 +92,7 @@ else header("Location: loginPage.php")
         <?php if (isset($_SESSION['user_id'])): ?> <!-- si il y a bien la session d'un utilisateur -->
             <input type="text" id="searchName" placeholder="enter pokemon name">
             <div class="button top" id="addButton">ADD TO DATABASE</div>
+            <div class="button top" id="boosterPack">DAILY PACK</div>
         <?php else: ?> <!-- sinon message par defaut -->
             <p>login to see your collection</p>
         <?php endif; ?> <!-- arreter le if car sections php différentes -->

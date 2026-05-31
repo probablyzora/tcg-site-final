@@ -3,7 +3,7 @@ require 'vendor/autoload.php';
 use GuzzleHttp\Client;
 
 $client = new Client();
-$name = $_GET['name'] ?? 'celebi'; // celebi va jamais etre utilisé de base mais juste placeholder 
+$query = $_GET['name'] ?? $_GET['id'] ?? 'celebi'; // celebi va jamais etre utilisé de base mais juste placeholder 
 $response = $client->request('GET',"https://pokeapi.co/api/v2/pokemon/$name"); // url api de pokemon de pokeapi 
 $data = json_decode($response->getBody(), true); // utilisation du json 
 

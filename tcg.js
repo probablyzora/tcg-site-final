@@ -29,6 +29,7 @@ const submitButton = document.getElementById("submitButton");
 console.log(themeButton);
 let currentTheme = localStorage.getItem("theme");
 let tickedBox = document.querySelector(".tosCheckbox").checked;
+const boosterPack = document.getElementById("boosterPack");
 console.log("submitButton");
 // THEME STUFF
 //
@@ -177,7 +178,7 @@ async function addPokemonCard() {
             </div>
         `;
     cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
-    const lightbox = GLightbox({ selector: ".glightbox" }); // refraichissement lightbox sinon lightbox ne marche pas sur les nouvelles images
+    GLightbox({ selector: ".glightbox" }); // refraichissement lightbox sinon lightbox ne marche pas sur les nouvelles images
 
     searchName.value = ""; // effacer apres avoir cherché
   } catch (error) {
@@ -189,3 +190,38 @@ addButton.addEventListener("click", addPokemonCard); // toucher bouton
 searchName.addEventListener("keypress", (event) => {
   if (event.key === "Enter") addPokemonCard();
 }); // accepter touche Enter
+
+async function openPack() {
+  const numberOfCards = 5;
+
+  for (let i = 0; i < numberOfCards; i++) {
+  randomId = Math.floor(Math.random()* 1025);
+  try {
+    const response = await fetch (`tcgsite.php?id=${randomId}`);
+    const data = await response.json();
+  if (data.error) {
+      console.log(data.error);
+      return;
+  }
+    const formData = new FormData(); // communication entre js/php et sql
+    formData.append("id", data.id);
+    formData.append("name", data.name);
+    await fetch("savecard.php", {
+      method: "POST",
+      body: formData,
+    });
+        const cardHTML = `
+            <div class="poke-card pulse">
+                <a href="${data.sprite}" class="glightbox" data-gallery="gallery1">
+                    <img src="${data.sprite}" alt="${data.name}" style="width: 100px; image-rendering: pixelated;">
+                </a>
+                <p>#${data.id} ${data.name}</p>
+            </div>
+        `;
+    cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
+    GLightbox({ selector: ".glightbox" });
+}
+catch (error){
+  console.error("Error adding card:", error)
+}}}
+boosterPack.addEventListener('click', openPack);
