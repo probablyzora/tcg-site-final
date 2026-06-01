@@ -293,58 +293,58 @@ pendulum swing buttons
 }
 /* type colors 
 https://bulbapedia.bulbagarden.net/wiki/Help:Color_templates#:~:text=Night%20color%20dark%7D%7D-,Video%20game%20types,-Types%20currently%20use*/
-.type-normal {
+.poke-card.type-normal {
   background-color: #9fa19f;
 }
-.type-fire {
+.poke-card.type-fire {
   background-color: #e62829;
 }
-.type-water {
+.poke-card.type-water {
   background-color: #2980ef;
 }
-.type-electric {
+.poke-card.type-electric {
   background-color: #fac000;
 }
-.type-grass {
+.poke-card.type-grass {
   background-color: #3fa129;
 }
-.type-ice {
+.poke-card.type-ice {
   background-color: #3dcef3;
 }
-.type-fighting {
+.poke-card.type-fighting {
   background-color: #ff8000;
 }
-.type-poison {
+.poke-card.type-poison {
   background-color: #9141cb;
 }
-.type-ground {
+.poke-card.type-ground {
   background-color: #915121;
 }
-.type-flying {
+.poke-card.type-flying {
   background-color: #81b9ef;
 }
-.type-psychic {
+.poke-card.type-psychic {
   background-color: #ef4179;
 }
-.type-bug {
+.poke-card.type-bug {
   background-color: #91a119;
 }
-.type-rock {
+.poke-card.type-rock {
   background-color: #afa981;
 }
-.type-ghost {
+.poke-card.type-ghost {
   background-color: #704170;
 }
-.type-dragon {
+.poke-card.type-dragon {
   background-color: #5060e1;
 }
-.type-dark {
+.poke-card.type-dark {
   background-color: #624d4e;
 }
-.type-steel {
+.poke-card.type-steel {
   background-color: #60a1b8;
 }
-.type-fairy {
+.poke-card.type-fairy {
   background-color: #ef70ef;
 }
 /* TYPE BADGE */

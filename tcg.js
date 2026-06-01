@@ -160,7 +160,8 @@ async function addPokemonCard() {
       body: formData,
     });
     // element html des cartes
-    cardCollection.insertAdjacentHTML("beforeend", buildCardHTML(data)); // ajoute la div + image a la suite des autres cartes
+    cardCollection.insertAdjacentHTML("beforeend", buildCardHTML(data));
+    refreshCards() // ajoute la div + image a la suite des autres cartes
     GLightbox({ selector: ".glightbox" }); // refraichissement lightbox sinon lightbox ne marche pas sur les nouvelles images
 
     searchName.value = ""; // effacer apres avoir cherché
@@ -190,7 +191,7 @@ function buildCardHTML(data) {
   data-types="${data.types.join(",")}"
   data-height="${data.height}"
   data-weight="${data.weight}">
-   <span class="star">fav</span>
+   <span class="star">☆</span>
   <img src="${data.sprite}" alt="${data.name}" style="width:100px; image-rendering:pixelated;">
   <p>#${data.id} ${data.name}</p>
   ${typeBadges}
@@ -241,6 +242,7 @@ async function openPack() {
         body: formData,
       });
       cardCollection.insertAdjacentHTML("beforeend", buildCardHTML(data)); // ajoute la div + image a la suite des autres cartes
+      refreshCards()
       GLightbox({ selector: ".glightbox" });
     } catch (error) {
       console.error("Error adding card:", error);

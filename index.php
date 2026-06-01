@@ -116,19 +116,19 @@ if (isset($_SESSION['user_id'])) {
    <section class="centerPage" id="cardCollection">
 <?php foreach ($savedCards as $card):
     $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png";
-    $primaryType = $card['types'] ? explode(',', $card['types'])[0] : 'normal';
+    $primaryType = !empty($card['types']) ? explode(',', $card['types'])[0] : 'normal';
 ?>
     <div class="poke-card type-<?= $primaryType ?>"
          data-id="<?= $card['poke_id'] ?>"
          data-name="<?= $card['poke_name'] ?>"
          data-sprite="<?= $spriteUrl ?>"
-         data-types="<?= $card['types'] ?? '' ?>"
+         data-types="<?= !empty($card['types']) ? $card['types'] : '' ?>"
          data-height="<?= $card['height'] ?? 0 ?>"
          data-weight="<?= $card['weight'] ?? 0 ?>">
-        <span class="star">fav</span>
+        <span class="star">☆</span>
         <img src="<?= $spriteUrl ?>" alt="<?= $card['poke_name'] ?>" style="width:100px; image-rendering:pixelated;">
         <p>#<?= $card['poke_id'] ?> <?= $card['poke_name'] ?></p>
-        <?php foreach (explode(',', $card['types'] ?? '') as $t): ?>
+        <?php foreach (explode(',', !empty($card['types']) ? $card['types'] : '') as $t): ?>
             <span class="type-badge type-<?= $t ?>"><?= $t ?></span>
         <?php endforeach; ?>
     </div>
