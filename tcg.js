@@ -151,21 +151,16 @@ async function addPokemonCard() {
     const formData = new FormData(); // communication entre js/php et sql
     formData.append("id", data.id);
     formData.append("name", data.name);
+    formData.append("types", data.types.join(","));
+    formData.append("height", data.height);
+    formData.append("weight", data.weight);
 
     await fetch("savecard.php", {
       method: "POST",
       body: formData,
     });
     // element html des cartes
-    const cardHTML = `
-            <div class="poke-card pulse">
-                <a href="${data.sprite}" class="glightbox" data-gallery="gallery1">
-                    <img src="${data.sprite}" alt="${data.name}" style="width: 100px; image-rendering: pixelated;">
-                </a>
-                <p>#${data.id} ${data.name}</p>
-            </div>
-        `;
-    cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
+    cardCollection.insertAdjacentHTML("beforeend", buildCardHTML(data)); // ajoute la div + image a la suite des autres cartes
     GLightbox({ selector: ".glightbox" }); // refraichissement lightbox sinon lightbox ne marche pas sur les nouvelles images
 
     searchName.value = ""; // effacer apres avoir cherché
@@ -182,29 +177,47 @@ if (searchName) {
     if (event.key === "Enter") addPokemonCard();
   });
 } // accepter touche Enter
-
+function buildCardHTML(data) {
+  const primaryType = data.types[0];
+  const typeBadges = data.types
+    .map((t) => `<span class="type-badge type-${t}">${t}</span>`)
+    .join("");
+  const cardHTML = `
+  <div class="poke-card type-${primaryType}"
+  data-id="${data.id}"
+  data-name="${data.name}"
+  data-sprite="${data.sprite}"
+  data-types="${data.types.join(",")}"
+  data-height="${data.height}"
+  data-weight="${data.weight}">
+   <span class="star">fav</span>
+  <img src="${data.sprite}" alt="${data.name}" style="width:100px; image-rendering:pixelated;">
+  <p>#${data.id} ${data.name}</p>
+  ${typeBadges}
+  </div>`;
+  return cardHTML;
+}
 async function openPack() {
   console.log("clicked pack button");
   const check = await fetch("checkCard.php");
   const status = await check.json();
   const lastOpened = new Date(status.lastOpened);
-  const nextOpen = new Date(lastOpened.getTime()+ 24 * 60*60*1000);
+  const nextOpen = new Date(lastOpened.getTime() + 24 * 60 * 60 * 1000);
   const diff = nextOpen - new Date();
-  const hours = Math.floor( diff / 1000 / 60 / 60 )
-  const minutes = Math.floor ((diff/1000/60)%60)
+  const hours = Math.floor(diff / 1000 / 60 / 60);
+  const minutes = Math.floor((diff / 1000 / 60) % 60);
   if (!status.canOpen) {
     console.log(`can't open pack. next open in ${hours}h,${minutes}m`);
     let notif = document.getElementById("notif");
     notif.classList.add("visible");
     notif.classList.remove("valid");
     notif.classList.add("invalid");
-    notif.innerHTML = `Can't open the pack yet!. Wait ${hours}h${minutes}m.`;
+    notif.innerHTML = `Can't open the pack yet!. Wait ${hours}h:${minutes}m.`;
     setTimeout(function () {
       notif.classList.remove("visible");
     }, 3000);
     return;
   }
-
   await fetch("checkCard.php", { method: "POST" });
   const numberOfCards = 5;
   for (let i = 0; i < numberOfCards; i++) {
@@ -219,19 +232,15 @@ async function openPack() {
       const formData = new FormData(); // communication entre js/php et sql
       formData.append("id", data.id);
       formData.append("name", data.name);
+      formData.append("types", data.types.join(","));
+      formData.append("height", data.height);
+      formData.append("weight", data.weight);
+
       await fetch("savecard.php", {
         method: "POST",
         body: formData,
       });
-      const cardHTML = `
-            <div class="poke-card pulse">
-                <a href="${data.sprite}" class="glightbox" data-gallery="gallery1">
-                    <img src="${data.sprite}" alt="${data.name}" style="width: 100px; image-rendering: pixelated;">
-                </a>
-                <p>#${data.id} ${data.name}</p>
-            </div>
-        `;
-      cardCollection.insertAdjacentHTML("beforeend", cardHTML); // ajoute la div + image a la suite des autres cartes
+      cardCollection.insertAdjacentHTML("beforeend", buildCardHTML(data)); // ajoute la div + image a la suite des autres cartes
       GLightbox({ selector: ".glightbox" });
     } catch (error) {
       console.error("Error adding card:", error);
@@ -242,3 +251,116 @@ if (boosterPack) {
   boosterPack.addEventListener("click", openPack);
 } // pour que ca fonctionne meme avec l'ordre de chargement
 console.log(boosterPack);
+// FAVOURITES
+function getFavs() {
+  return JSON.parse(localStorage.getItem("favourites") || "[]");
+}
+function saveFavs(favs) {
+  localStorage.setItem("favourites", JSON.stringify(favs));
+}
+
+// REFRESH — applies favourites, filters, and rebuilds filter bar
+function refreshCards() {
+  const favs = getFavs();
+  const collection = document.getElementById("cardCollection");
+  if (!collection) return;
+
+  const cards = Array.from(collection.querySelectorAll(".poke-card"));
+
+  // apply favourite style and star
+  cards.forEach((card) => {
+    const isFav = favs.includes(card.dataset.id);
+    card.classList.toggle("favourite", isFav);
+    card.querySelector(".star").textContent = isFav ? "★" : "☆";
+  });
+
+  // move favourites to top
+  const favCards = cards.filter((c) => favs.includes(c.dataset.id));
+  const rest = cards.filter((c) => !favs.includes(c.dataset.id));
+  [...favCards, ...rest].forEach((c) => collection.appendChild(c));
+
+  // apply type filter
+  const activeFilters = Array.from(
+    document.querySelectorAll("#filterBar button.active"),
+  ).map((b) => b.dataset.type);
+  cards.forEach((card) => {
+    if (activeFilters.length === 0) {
+      card.style.display = "";
+    } else {
+      const cardTypes = card.dataset.types.split(",");
+      card.style.display = cardTypes.some((t) => activeFilters.includes(t))
+        ? ""
+        : "none";
+    }
+  });
+
+  // rebuild filter bar
+  const allTypes = new Set();
+  cards.forEach((card) =>
+    card.dataset.types.split(",").forEach((t) => allTypes.add(t)),
+  );
+  const bar = document.getElementById("filterBar");
+  if (!bar) return;
+  const currentActive = new Set(activeFilters);
+  bar.innerHTML = "";
+  allTypes.forEach((type) => {
+    const btn = document.createElement("button");
+    btn.textContent = type;
+    btn.dataset.type = type;
+    btn.className = `type-${type}`;
+    if (currentActive.has(type)) btn.classList.add("active");
+    btn.addEventListener("click", () => {
+      btn.classList.toggle("active");
+      refreshCards();
+    });
+    bar.appendChild(btn);
+  });
+}
+
+// STAR CLICK
+if (cardCollection) {
+  cardCollection.addEventListener("click", function (e) {
+    if (!e.target.classList.contains("star")) return;
+    const card = e.target.closest(".poke-card");
+    const favs = getFavs();
+    const id = card.dataset.id;
+    if (favs.includes(id)) {
+      saveFavs(favs.filter((f) => f !== id));
+    } else {
+      saveFavs([...favs, id]);
+    }
+    refreshCards();
+  });
+}
+
+// MODAL
+if (cardCollection) {
+  cardCollection.addEventListener("click", function (e) {
+    if (e.target.classList.contains("star")) return;
+    const card = e.target.closest(".poke-card");
+    if (!card) return;
+    document.getElementById("modalSprite").src = card.dataset.sprite;
+    document.getElementById("modalName").textContent = card.dataset.name;
+    document.getElementById("modalId").textContent = "#" + card.dataset.id;
+    document.getElementById("modalHeight").textContent =
+      "Height: " + card.dataset.height / 10 + "m";
+    document.getElementById("modalWeight").textContent =
+      "Weight: " + card.dataset.weight / 10 + "kg";
+    document.getElementById("modalTypes").innerHTML = card.dataset.types
+      .split(",")
+      .map((t) => `<span class="type-badge type-${t}">${t}</span>`)
+      .join("");
+    const modal = document.getElementById("cardModal");
+    modal.style.display = "flex";
+  });
+}
+
+document.getElementById("closeModal")?.addEventListener("click", () => {
+  document.getElementById("cardModal").style.display = "none";
+});
+document.getElementById("cardModal")?.addEventListener("click", function (e) {
+  if (e.target === this) this.style.display = "none";
+});
+
+// run on load
+refreshCards();
