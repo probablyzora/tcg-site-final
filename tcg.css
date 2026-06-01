@@ -294,56 +294,92 @@ pendulum swing buttons
 /* type colors 
 https://bulbapedia.bulbagarden.net/wiki/Help:Color_templates#:~:text=Night%20color%20dark%7D%7D-,Video%20game%20types,-Types%20currently%20use*/
 .type-normal {
-  background-color: #9FA19F;
+  background-color: #9fa19f;
 }
 .type-fire {
-  background-color: #E62829;
+  background-color: #e62829;
 }
 .type-water {
-  background-color: #2980EF;
+  background-color: #2980ef;
 }
 .type-electric {
-  background-color: #FAC000;
+  background-color: #fac000;
 }
 .type-grass {
-  background-color: #3FA129;
+  background-color: #3fa129;
 }
 .type-ice {
-  background-color: #3DCEF3;
+  background-color: #3dcef3;
 }
 .type-fighting {
-  background-color: #FF8000;
+  background-color: #ff8000;
 }
 .type-poison {
-  background-color: #9141CB;
+  background-color: #9141cb;
 }
 .type-ground {
   background-color: #915121;
 }
 .type-flying {
-  background-color: #81B9EF;
+  background-color: #81b9ef;
 }
 .type-psychic {
-  background-color: #EF4179;
+  background-color: #ef4179;
 }
 .type-bug {
-  background-color: #91A119;
+  background-color: #91a119;
 }
 .type-rock {
-  background-color: #AFA981;
+  background-color: #afa981;
 }
 .type-ghost {
   background-color: #704170;
 }
 .type-dragon {
-  background-color: #5060E1;
+  background-color: #5060e1;
 }
 .type-dark {
-  background-color: #624D4E;
+  background-color: #624d4e;
 }
 .type-steel {
-  background-color: #60A1B8;
+  background-color: #60a1b8;
 }
 .type-fairy {
-  background-color: #EF70EF;
+  background-color: #ef70ef;
+}
+/* TYPE BADGE */
+.type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-weight: bold;
+  color: white;
+  margin: 2px;
+  text-transform: capitalize;
+}
+.type-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 10px;
+  font-size: 0.7em;
+  font-weight: bold;
+  color: white;
+  margin: 2px;
+  text-transform: capitalize;
+}
+
+/*favourite */
+.poke-card {
+  position: relative;
+}
+.star {
+  position: absolute;
+  top: 5px;
+  right: 8px;
+  font-size: 1.2em;
+  cursor: pointer;
+  user-select: none;
+}
+.poke-card.favourite {
+  outline: 3px solid gold;
 }
