@@ -2,7 +2,7 @@
 session_start();
 
 try {
-    $pdo = new PDO("mysql:host=localhost;dbname=tcg_site", "root", ""); // connexion a la bd
+    $pdo = new PDO("mysql:host=localhost;dbname=tcg_site", "root", ""); // connection to the database
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 } catch (PDOException $e) {
     echo "" . $e->getMessage();
@@ -12,7 +12,7 @@ $savedCards = [];
 if (isset($_SESSION['user_id'])) {
     $request = $pdo->prepare("SELECT * FROM cards WHERE user_id = ?");
     $request->execute([$_SESSION['user_id']]);
-    $savedCards = $request->fetchAll(PDO::FETCH_ASSOC); // verif de session et fetch des cartes
+    $savedCards = $request->fetchAll(PDO::FETCH_ASSOC); // session verification and fetching cards
 } else
     header("Location: loginPage.php")
         ?>
@@ -23,7 +23,7 @@ if (isset($_SESSION['user_id'])) {
         <title>bad website</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-        <link rel="stylesheet" href="tcg.css" />
+        <link rel="stylesheet" href="tcg.css" /> 
     </head>
 
     <body>
@@ -41,7 +41,7 @@ if (isset($_SESSION['user_id'])) {
         <section class="buttonSection">
         <?php if (!isset($_SESSION['user_id'])): ?>
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
-                <!-- pas classe mais on peux mettre ca en dehors du css car j'aimerai bien rendre tout ca -->
+                <!-- putting style in the div itself isn't great but i don't know and don't have enough time to fix this -->
                 <!-- LOGIN -->
                 <form action="login.php" method="POST" style="display:flex; gap:5px;">
                     <input type="email" name="email" placeholder="email" required>
@@ -49,12 +49,13 @@ if (isset($_SESSION['user_id'])) {
                     <button type="submit" class="button">login</button>
 
                 </form>
-                <!-- ENREGISTRER -->
+                <!-- REGISTER -->
                 <form action="register.php" method="POST" style="display:flex; gap:5px;">
                     <input type="email" name="email" placeholder="new email" required>
                     <input type="password" name="password" placeholder="new password" required>
                     <button type="submit" class="button">register</button>
                 </form>
+        <!-- no longer useful because it is handled on its own page-->
             </div>
         <?php else: ?>
             <div style="text-align:center; width:100%;">
@@ -64,8 +65,6 @@ if (isset($_SESSION['user_id'])) {
     </section>
     <section class="buttonSection">
         <div class="button top pulse">NEW</div>
-        <div class="button top">Collection</div>
-        <div class="button top">My Account</div>
     </section>
     <section class="centerPage">
         <div class="swiper">
@@ -90,22 +89,22 @@ if (isset($_SESSION['user_id'])) {
         <div class="newsletter" id="newsletter">cards</div>
     </section>
     <section class="buttonSection">
-        <?php if (isset($_SESSION['user_id'])): ?> <!-- si il y a bien la session d'un utilisateur -->
+        <?php if (isset($_SESSION['user_id'])): ?> <!-- show sectiom if only logged in,
+            no longer useful since login is done at the page and this page is innaccessible if not logged in -->
             <input type="text" id="searchName" placeholder="enter pokemon name">
             <div class="button top" id="addButton">ADD TO DATABASE</div>
             <div class="button top" id="boosterPack">DAILY PACK</div>
-        <?php else: ?> <!-- sinon message par defaut -->
+        <?php else: ?> <!-- no longer useful -->
             <p>login to see your collection</p>
-        <?php endif; ?> <!-- arreter le if car sections php différentes -->
+        <?php endif; ?> <!-- ending this part of php code -->
     </section>
 
-    <div id="cardModal"
-        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
-        <div
-            style="background:white; border-radius:20px; padding:30px; text-align:center; position:relative; min-width:220px;">
-            <button id="closeModal"
-                style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.4em; cursor:pointer;">✕</button>
-            <img id="modalSprite" src="" style="width:120px; image-rendering:pixelated;">
+    <div id="cardModal" class="cardModal"> <!-- i literally no longer know why it doesn't work when it comes to css -->
+        <div style="background:orange; border-radius:20px; padding:30px; text-align:center; position:relative; min-width:220px;">
+            <button id="closeModal" 
+                style="position:absolute; top:10px; right:14px; background:none; border:none; cursor:pointer;">X</button>
+            <!-- otherwise x doesn't show in the right place -->
+                <img id="modalSprite" src="" style="width:120px; image-rendering:pixelated;">
             <h3 id="modalName"></h3>
             <p id="modalId"></p>
             <div id="modalTypes"></div>
@@ -115,21 +114,22 @@ if (isset($_SESSION['user_id'])) {
     </div>
    <section class="centerPage" id="cardCollection">
 <?php foreach ($savedCards as $card):
-    $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png";
-    $primaryType = !empty($card['types']) ? explode(',', $card['types'])[0] : 'normal';
+    $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png"; 
+    $primaryType = !empty($card['types']) ? explode(',', $card['types'])[0] : 'normal'; // explode -> string -> array, 
+    // if types of the card is not empty ( exists ) , turn the strings of the types into arrays, then take first type. defaults to nomal
 ?>
-    <div class="poke-card type-<?= $primaryType ?>"
+    <div class="poke-card type-<?= $primaryType ?>" 
          data-id="<?= $card['poke_id'] ?>"
          data-name="<?= $card['poke_name'] ?>"
          data-sprite="<?= $spriteUrl ?>"
          data-types="<?= !empty($card['types']) ? $card['types'] : '' ?>"
-         data-height="<?= $card['height'] ?? 0 ?>"
-         data-weight="<?= $card['weight'] ?? 0 ?>">
-        <span class="star">☆</span>
+         data-height="<?= $card['height'] ?? 0 ?>" 
+         data-weight="<?= $card['weight'] ?? 0 ?>"> <!-- if no weight, put 0 -->
+        <span class="star">☆</span> <!-- favorite system doens't work :/ -->
         <img src="<?= $spriteUrl ?>" alt="<?= $card['poke_name'] ?>" style="width:100px; image-rendering:pixelated;">
         <p>#<?= $card['poke_id'] ?> <?= $card['poke_name'] ?></p>
         <?php foreach (explode(',', !empty($card['types']) ? $card['types'] : '') as $t): ?>
-            <span class="type-badge type-<?= $t ?>"><?= $t ?></span>
+            <span class="type-badge type-<?= $t ?>"><?= $t ?></span> <!-- type badge type-fire > fire < xx > -->
         <?php endforeach; ?>
     </div>
 <?php endforeach; ?>
@@ -137,7 +137,7 @@ if (isset($_SESSION['user_id'])) {
     <section class="buttonSection">
         <div class="button bottom" onclick="document.location='iotprojects.php'">IOT Projects</div>
     </section>
-    <section>
+    <section style="style="diplay: flex; align-items:center; justify-content:center;>
         <section class="topPage">
             <div class="newsletter" id="newsletter">a really bad<br>newsletter</div>
         </section>

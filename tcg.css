@@ -207,9 +207,11 @@ section.loginSection {
   padding: 20px;
   border-bottom: 20px;
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
+  flex-direction: column;
   align-items: center;
   justify-items: center;
+  justify-content: center;
   background: var(--important-color);
 }
 /*
@@ -353,7 +355,7 @@ https://bulbapedia.bulbagarden.net/wiki/Help:Color_templates#:~:text=Night%20col
   padding: 2px 8px;
   border-radius: 10px;
   font-weight: bold;
-  color: white;
+  color: yellow;
   margin: 2px;
   text-transform: capitalize;
 }
@@ -382,4 +384,21 @@ https://bulbapedia.bulbagarden.net/wiki/Help:Color_templates#:~:text=Night%20col
 }
 .poke-card.favourite {
   outline: 3px solid gold;
+}
+.cardmodal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  justify-content: center;
+  align-items: center;
+}
+.cardModal.cardDetail {
+  background-color: white;
+  border-radius: 20px;
+  padding: 30px;
+  text-align: center;
+  position: relative;
+  min-width: 220px;
 }

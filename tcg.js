@@ -138,17 +138,16 @@ console.log("a", boosterPack);
 //asynchrone = ordre independant des autres fonctions
 async function addPokemonCard() {
   const name = searchName.value;
-  if (!name) return; // si il y a pas de nom dans la barre de recherche
-
+  if (!name) return; // if theres nothing in the search bar
   try {
-    const response = await fetch(`tcgsite.php?name=${name}`); // requete cote php
+    const response = await fetch(`tcgsite.php?name=${name}`); // php request
     const data = await response.json();
 
     if (data.error) {
       console.log(data.error);
       return;
     }
-    const formData = new FormData(); // communication entre js/php et sql
+    const formData = new FormData(); // js php sql communication 
     formData.append("id", data.id);
     formData.append("name", data.name);
     formData.append("types", data.types.join(","));
@@ -296,7 +295,7 @@ function refreshCards() {
     }
   });
 
-  // rebuild filter bar
+  // no longer works / filter bar
   const allTypes = new Set();
   cards.forEach((card) =>
     card.dataset.types.split(",").forEach((t) => allTypes.add(t)),
@@ -319,7 +318,7 @@ function refreshCards() {
   });
 }
 
-// STAR CLICK
+// this never worked
 if (cardCollection) {
   cardCollection.addEventListener("click", function (e) {
     if (!e.target.classList.contains("star")) return;

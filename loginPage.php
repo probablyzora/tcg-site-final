@@ -16,7 +16,9 @@
         <div class="logo" id="logo"><img src="assets/logo.png"></div>
     </section>
     <!-- ########################################-->
-
+    <section class="topPage">
+        <div class="newsletter" id="newsletter" style:"background-color:>sign in / register</div>
+    </section>
     <!-- ###### center w/ swiperjs and glightbox integration and text-->
     <section class="loginSection">
         <?php if (!isset($_SESSION['user_id'])): ?>
