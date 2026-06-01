@@ -3,7 +3,7 @@
         'name' => 'oszmyt/exemple',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => 'a1bba37a04f790750ba75159a40bde1f8f168fc2',
+        'reference' => '7385c39cab78d0e24c16a468dbe1e4254fd9ebd5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -49,7 +49,7 @@
         'oszmyt/exemple' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => 'a1bba37a04f790750ba75159a40bde1f8f168fc2',
+            'reference' => '7385c39cab78d0e24c16a468dbe1e4254fd9ebd5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

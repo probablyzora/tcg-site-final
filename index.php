@@ -13,32 +13,32 @@ if (isset($_SESSION['user_id'])) {
     $request = $pdo->prepare("SELECT * FROM cards WHERE user_id = ?");
     $request->execute([$_SESSION['user_id']]);
     $savedCards = $request->fetchAll(PDO::FETCH_ASSOC); // verif de session et fetch des cartes
-}
-else header("Location: loginPage.php")
-?>
+} else
+    header("Location: loginPage.php")
+        ?>
 
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>bad website</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
-    <link rel="stylesheet" href="tcg.css" />
-</head>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>bad website</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@12/swiper-bundle.min.css" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css" />
+        <link rel="stylesheet" href="tcg.css" />
+    </head>
 
-<body>
-    <!-- Theme change button-->
-    <div class="themeButton" id="themeButton"></div>
-    <!---->
-    <!-- ## Top of page w/ Logo n dark/light mode-->
-    <section class="topPage">
-        <!-- <div class="logo" id="logo">a legally distinct <br>pocket monsters™<br>trading card game<br>website</div> -->
-        <div class="logo" id="logo"><img src="assets/logo.png"></div>
-    </section>
-    <!-- ########################################-->
+    <body>
+        <!-- Theme change button-->
+        <div class="themeButton" id="themeButton"></div>
+        <!---->
+        <!-- ## Top of page w/ Logo n dark/light mode-->
+        <section class="topPage">
+            <!-- <div class="logo" id="logo">a legally distinct <br>pocket monsters™<br>trading card game<br>website</div> -->
+            <div class="logo" id="logo"><img src="assets/logo.png"></div>
+        </section>
+        <!-- ########################################-->
 
-    <!-- ###### center w/ swiperjs and glightbox integration and text-->
-    <section class="buttonSection">
+        <!-- ###### center w/ swiperjs and glightbox integration and text-->
+        <section class="buttonSection">
         <?php if (!isset($_SESSION['user_id'])): ?>
             <div style="display:flex; gap:10px; justify-content:center; flex-wrap:wrap;">
                 <!-- pas classe mais on peux mettre ca en dehors du css car j'aimerai bien rendre tout ca -->
@@ -86,9 +86,9 @@ else header("Location: loginPage.php")
                 <!-- If we need pagination -->
                 <div class="swiper-pagination"></div>
     </section>
-            <section class="topPage">
-            <div class="newsletter" id="newsletter">cards</div>
-        </section>
+    <section class="topPage">
+        <div class="newsletter" id="newsletter">cards</div>
+    </section>
     <section class="buttonSection">
         <?php if (isset($_SESSION['user_id'])): ?> <!-- si il y a bien la session d'un utilisateur -->
             <input type="text" id="searchName" placeholder="enter pokemon name">
@@ -98,18 +98,42 @@ else header("Location: loginPage.php")
             <p>login to see your collection</p>
         <?php endif; ?> <!-- arreter le if car sections php différentes -->
     </section>
-    <section class="centerPage" id="cardCollection"> <?php foreach ($savedCards as $card):
-        $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png";
-        ?>
-            <div class="poke-card pulse">
-                <a href="<?= $spriteUrl ?>" class="glightbox" data-gallery="gallery1">
-                    <img src="<?= $spriteUrl ?>" alt="<?= ($card['poke_name']) ?>"
-                        style="width: 100px; image-rendering: pixelated;">
-                </a>
-                <p>#<?= $card['poke_id'] ?>     <?= ($card['poke_name']) ?></p>
-            </div>
+
+    <div id="cardModal"
+        style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:1000; justify-content:center; align-items:center;">
+        <div
+            style="background:white; border-radius:20px; padding:30px; text-align:center; position:relative; min-width:220px;">
+            <button id="closeModal"
+                style="position:absolute; top:10px; right:14px; background:none; border:none; font-size:1.4em; cursor:pointer;">✕</button>
+            <img id="modalSprite" src="" style="width:120px; image-rendering:pixelated;">
+            <h3 id="modalName"></h3>
+            <p id="modalId"></p>
+            <div id="modalTypes"></div>
+            <p id="modalHeight"></p>
+            <p id="modalWeight"></p>
+        </div>
+    </div>
+   <section class="centerPage" id="cardCollection">
+<?php foreach ($savedCards as $card):
+    $spriteUrl = "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/" . $card['poke_id'] . ".png";
+    $primaryType = $card['types'] ? explode(',', $card['types'])[0] : 'normal';
+?>
+    <div class="poke-card type-<?= $primaryType ?>"
+         data-id="<?= $card['poke_id'] ?>"
+         data-name="<?= $card['poke_name'] ?>"
+         data-sprite="<?= $spriteUrl ?>"
+         data-types="<?= $card['types'] ?? '' ?>"
+         data-height="<?= $card['height'] ?? 0 ?>"
+         data-weight="<?= $card['weight'] ?? 0 ?>">
+        <span class="star">fav</span>
+        <img src="<?= $spriteUrl ?>" alt="<?= $card['poke_name'] ?>" style="width:100px; image-rendering:pixelated;">
+        <p>#<?= $card['poke_id'] ?> <?= $card['poke_name'] ?></p>
+        <?php foreach (explode(',', $card['types'] ?? '') as $t): ?>
+            <span class="type-badge type-<?= $t ?>"><?= $t ?></span>
         <?php endforeach; ?>
-    </section>
+    </div>
+<?php endforeach; ?>
+</section>
     <section class="buttonSection">
         <div class="button bottom" onclick="document.location='iotprojects.php'">IOT Projects</div>
     </section>
